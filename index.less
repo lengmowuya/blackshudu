@@ -1,0 +1,266 @@
+*{
+    margin:0;
+    padding:0;
+}
+@font-face{
+    font-family: "shouShu";
+    src:url("./云游手书.ttf");
+}
+body{
+    width:100vw;
+    height:100vh;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+.startView{
+    width:100vw;
+    height:100vh;
+    background:#eee;
+    position: fixed;
+    top:0;
+    left:0;
+    z-index:999;
+    display:flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    &.isStart{
+        animation:hideView 1.6s forwards ease-out;
+    }
+    &.hide{
+        display:none;
+    }
+    .logo{
+        width:240px;
+        height:300px;
+        opacity: 0;
+        user-select: none;
+        border:0px solid transparent;
+        background: url('./黑鸦logo.png') no-repeat center center;;
+        background-size: 100% auto;
+        animation:showLogo 2s forwards ease-in-out;
+    }
+    .start_game{
+        letter-spacing: 1px;
+        font-weight: bold;
+        font-family: "shouShu";
+        user-select: none;
+        opacity: 0;
+        animation:showLogo 0.6s 2s forwards ease-in-out,
+            showLoop 2.2s 2.65s infinite;
+    }
+}
+@keyframes showLogo{
+    from{
+        opacity: 0;
+    }
+    to{
+        opacity: 1;
+    }
+}
+@keyframes showLoop{
+    0%{
+        opacity: 1;
+    }
+    50%{
+        opacity: 0.1;
+    }
+    100%{
+        opacity: 1;
+    }
+}
+@keyframes hideView{
+    0%{
+        opacity: 1;
+        display:flex;
+    }
+    99%{
+        opacity: 0;
+    }
+    100%{
+        opacity: 0;
+    }
+}
+.Board{
+    width:700px;
+    height:700px; 
+    // border:6px solid #333;
+    display:flex;
+    flex-flow: row wrap;
+    .middle_area{
+        border:4px solid #fff;
+        width:30%;
+        flex-grow: 1;
+        display:flex;
+        flex-flow: row wrap;
+        flex-shrink: 0;
+        // box-shadow: 0px 0px 3px rgb(0, 0, 0,0.1);
+        .small_area{
+            @padding:1px;
+
+            border:1px solid #eee;
+            width:30%;
+            flex-grow: 1;
+            flex-shrink: 0;
+            display:flex;
+            flex-flow: row wrap;
+            padding:@padding;
+            box-sizing: border-box;
+            position: relative;
+            border-radius: 3px;
+            margin:1px;
+            transition: all 0.2s;
+            &.hover{
+                // border-color: #999;
+                // border-color:tomato !important;
+                // border:1px solid blue;
+                // background:#ccc;
+                .number_button{
+                    background:#ddd;
+                }
+            }
+            &.active{
+                border:none;
+                .number_button{
+                    // display:none;
+                }
+                .card{
+                    display:block;
+                    opacity: 1;
+                    // animation:showCard 0.3s forwards;
+                }
+            }
+            .number_button{
+                width:26%;
+                flex-grow: 1;
+                border:none;
+                border-radius:0;
+                // background:#999;
+                // color:#eee;
+                margin:1px;
+                font-size:12px;
+                transition:all 0.2s;
+                outline:none;
+                border-radius: 3px;
+                user-select: none;
+                // font-weight: bold;
+                background:#f3f3f3;
+                // font-family: "shouShu";
+                &:hover{
+                    background:#333;
+                    color:#eee;
+                }
+                &.hide{
+                    animation:hiddenButton 0.3s forwards;
+                    // display:none;
+                }
+            }
+            .card{
+                width:calc(100%);
+                height:calc(100% - 6px);
+                flex-grow: 1;
+                border:none;
+                border-radius:0;
+                font-size:42px;
+                // font-weight: bold;
+                outline:none;
+                position:absolute;
+                left:0px;
+                top:0px;
+                user-select: none;
+                border-radius: 5px;
+                text-shadow: 4px 4px 0px rgba(0, 0, 0, 0.1); 
+                transition: all 0.3s;
+                display:none;
+                // opacity:0;
+                background:#eee;
+                // -webkit-text-fill-color:transparent;
+                // color:#eee;
+                // text-shadow: 1px 0px 1px #000,-1px 0px 1px #fff;
+                box-shadow: 0px 6px 0px #ccc;
+                font-family: "shouShu";
+                &:hover{
+                    background:#666;
+                    box-shadow: 0px 6px 0px #333;
+                    color:#fff;
+                    text-shadow: 4px 4px 0px rgba(255, 255, 255, 0.1);
+                }
+                // &.active{
+                //     display:block;
+                // }
+            }
+        }
+    }
+}
+@keyframes hiddenButton{
+    0%{
+        opacity:1;
+    }
+    99%{
+        opacity:0;
+    }
+    100%{
+        opacity:0;
+        visibility:hidden;
+    }
+}
+@keyframes showCard{
+    0%{
+        opacity:0 !important;
+    }
+    100%{
+        opacity:1 !important;
+    }
+}
+.Info{
+    width:200px;
+    height:700px;
+
+    margin-left:15px;
+    display:flex;
+    border-radius: 6px;
+    flex-flow: column;
+    .history{
+        width:100%;
+        height: 200px;
+        // background:#f6f6f6;
+        border:1px solid #eee;
+        border-radius: 6px;
+        display:flex;
+        .historyList{
+            flex-grow: 1;
+            list-style: none;
+            display:flex;
+            flex-flow: column;
+            padding:5px;
+            overflow: auto;
+            .historyLi{
+                // line-height: 26px;
+                font-size: 12px;
+                color:#666;
+                // border-bottom:1px solid #eee;
+                cursor: pointer;
+                transition:all 0.2s;
+                padding:5px 5px;
+                box-sizing: border-box;
+                border-radius:3px;
+                user-select: none;
+                font-family: "shouShu";
+                &:last-child{
+                    background:#eee;
+                }
+                &:hover{
+                    color:#ccc;
+                    background:#333;
+                }
+            }
+        }
+    }
+    .time{
+        font-size:12px;
+        line-height: 30px;
+        color:#666;
+        margin:10px;
+    }
+}
