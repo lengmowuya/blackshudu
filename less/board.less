@@ -1,106 +1,49 @@
-*{
-    margin:0;
-    padding:0;
-}
-@font-face{
-    font-family: "shouShu";
-    src:url("./云游手书.ttf");
-}
-body{
-    width:100vw;
-    height:100vh;
-    display:flex;
-    justify-content: center;
-    align-items: center;
-}
-.startView{
-    width:100vw;
-    height:100vh;
-    background:#eee;
-    position: fixed;
-    top:0;
-    left:0;
-    z-index:999;
-    display:flex;
-    flex-flow: column;
-    justify-content: center;
-    align-items: center;
-    &.isStart{
-        animation:hideView 1.6s forwards ease-out;
-    }
-    &.hide{
-        display:none;
-    }
-    .logo{
-        width:240px;
-        height:300px;
-        opacity: 0;
-        user-select: none;
-        border:0px solid transparent;
-        background: url('./黑鸦logo.png') no-repeat center center;;
-        background-size: 100% auto;
-        animation:showLogo 2s forwards ease-in-out;
-    }
-    .start_game{
-        letter-spacing: 1px;
-        font-weight: bold;
-        font-family: "shouShu";
-        user-select: none;
-        opacity: 0;
-        animation:showLogo 0.6s 2s forwards ease-in-out,
-            showLoop 2.2s 2.65s infinite;
-    }
-}
-@keyframes showLogo{
-    from{
-        opacity: 0;
-    }
-    to{
-        opacity: 1;
-    }
-}
-@keyframes showLoop{
-    0%{
-        opacity: 1;
-    }
-    50%{
-        opacity: 0.1;
-    }
-    100%{
-        opacity: 1;
-    }
-}
-@keyframes hideView{
-    0%{
-        opacity: 1;
-        display:flex;
-    }
-    99%{
-        opacity: 0;
-    }
-    100%{
-        opacity: 0;
-    }
-}
 .Board{
-    width:700px;
-    height:700px; 
+    width:680px;
+    height:680px; 
     // border:6px solid #333;
     display:flex;
     flex-flow: row wrap;
-    .middle_area{
-        border:4px solid #fff;
+    background:#fff;
+    padding:10px;
+    // border:15px solid #eee;
+    // border-image: url(./../assets/OIP.jfif) 20 20 round;
+    border-radius: 12px;
+    border:2px solid #eee;
+    box-shadow: 5px 5px 0px #eee;
+    &.squazeMode{
+        .numberButton{
+            visibility:hidden;
+        }
+        .smallArea{
+            &:hover{
+                .numberButton{
+                    visibility: visible;
+                }
+            }
+        }
+    }
+    .middleArea{
+        // border:4px solid #ccc;
+        margin:6px;
         width:30%;
         flex-grow: 1;
         display:flex;
         flex-flow: row wrap;
         flex-shrink: 0;
         // box-shadow: 0px 0px 3px rgb(0, 0, 0,0.1);
-        .small_area{
-            @padding:1px;
-
-            border:1px solid #eee;
+        // &:nth-child(2n-1){
+        //     background:#eee;
+        //     border:4px solid #eee;
+        //     .smallArea{
+        //         border-color:#ccc;
+        //     }
+        // }
+        .smallArea{
+            @padding:0px;
+            border:2px solid #f6f6f6;
             width:30%;
+            background:#fff;
             flex-grow: 1;
             flex-shrink: 0;
             display:flex;
@@ -109,29 +52,32 @@ body{
             box-sizing: border-box;
             position: relative;
             border-radius: 3px;
-            margin:1px;
+            margin:3px;
             transition: all 0.2s;
-            &.hover{
+            &.light{
                 // border-color: #999;
                 // border-color:tomato !important;
                 // border:1px solid blue;
                 // background:#ccc;
-                .number_button{
-                    background:#ddd;
+                border-color: #ddd;
+                // box-shadow:4px 6px 3px #eee;
+
+                .numberButton{
+                    // background:#ddd;
                 }
             }
             &.active{
                 border:none;
-                .number_button{
+                .numberButton{
                     // display:none;
                 }
-                .card{
-                    display:block;
+                .numberCard{
+                    visibility: visible;
                     opacity: 1;
                     // animation:showCard 0.3s forwards;
                 }
             }
-            .number_button{
+            .numberButton{
                 width:26%;
                 flex-grow: 1;
                 border:none;
@@ -156,7 +102,7 @@ body{
                     // display:none;
                 }
             }
-            .card{
+            .numberCard{
                 width:calc(100%);
                 height:calc(100% - 6px);
                 flex-grow: 1;
@@ -170,20 +116,24 @@ body{
                 top:0px;
                 user-select: none;
                 border-radius: 5px;
+                vertical-align: top;
                 text-shadow: 4px 4px 0px rgba(0, 0, 0, 0.1); 
                 transition: all 0.3s;
-                display:none;
+                // display:none;
+                visibility:hidden;
                 // opacity:0;
                 background:#eee;
+                border:1px solid #ccc;
+                box-sizing: border-box;
                 // -webkit-text-fill-color:transparent;
                 // color:#eee;
                 // text-shadow: 1px 0px 1px #000,-1px 0px 1px #fff;
                 box-shadow: 0px 6px 0px #ccc;
                 font-family: "shouShu";
                 &:hover{
-                    background:#666;
-                    box-shadow: 0px 6px 0px #333;
-                    color:#fff;
+                    background:#ccc;
+                    box-shadow: 0px 6px 0px #aaa;
+                    // color:#fff;
                     text-shadow: 4px 4px 0px rgba(255, 255, 255, 0.1);
                 }
                 // &.active{
@@ -215,7 +165,7 @@ body{
 }
 .Info{
     width:200px;
-    height:700px;
+    height:730px;
 
     margin-left:15px;
     display:flex;
@@ -225,9 +175,12 @@ body{
         width:100%;
         height: 200px;
         // background:#f6f6f6;
-        border:1px solid #eee;
+        border:2px solid #eee;
+        background:#fff;
         border-radius: 6px;
         display:flex;
+        border:8px solid #eee;
+        box-shadow: 3px 3px 0px #ccc,6px 6px 9px #999;
         .historyList{
             flex-grow: 1;
             list-style: none;
@@ -235,11 +188,22 @@ body{
             flex-flow: column;
             padding:5px;
             overflow: auto;
+            &::-webkit-scrollbar{
+                width:4px;
+            }
+            &::-webkit-scrollbar-track{
+                width:4px;
+                background:#eee;
+            }
+            &::-webkit-scrollbar-thumb{
+                width:4px;
+                background:#ccc;
+            }
             .historyLi{
                 // line-height: 26px;
                 font-size: 12px;
-                color:#666;
-                // border-bottom:1px solid #eee;
+                color:#888; 
+                    // border-bottom:1px solid #eee;
                 cursor: pointer;
                 transition:all 0.2s;
                 padding:5px 5px;
@@ -247,12 +211,16 @@ body{
                 border-radius:3px;
                 user-select: none;
                 font-family: "shouShu";
+                // border-bottom:1px solid #f6f6f6;
                 &:last-child{
                     background:#eee;
                 }
                 &:hover{
                     color:#ccc;
-                    background:#333;
+                    background:#666;
+                }
+                .number{
+                    color:#333;
                 }
             }
         }
