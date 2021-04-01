@@ -54,4 +54,6 @@ BoardHistory.init();
 
 
 // initBoard();
-let MainBoard = new Board();
+let MainBoard = new Board({
+    canChangeStone:false
+});

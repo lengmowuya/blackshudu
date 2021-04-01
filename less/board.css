@@ -38,6 +38,10 @@
   margin: 3px;
   transition: all 0.2s;
 }
+.Board .middleArea .smallArea.stone {
+  background: #ccc;
+  color: #333;
+}
 .Board .middleArea .smallArea.light {
   border-color: #ddd;
 }

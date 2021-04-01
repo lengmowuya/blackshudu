@@ -5,14 +5,68 @@ let Omain = document.querySelector(".Board");
 // 判断块，区是否同行，同列
 //  初始化时，给块分左中右和上中下
 // 响应时，只需要呼叫大块等于响应块的位置即可，小块只需要响应小块的位置即可
-class Board{
-    constructor(){
+
+
+// 待优化内容：
+    // 1.event不要随着广播传递，可以直接使用
+    // 2.事件直接抽离，不用每次生成对象都有个实例方法
+    // 3.期盼点：流形的事件逻辑处理
+    // 4.事件集中注册
+    // 5.优化冗余函数
+    // 6.优化类的函数注册
+    // 7.每级的对象，都可以轻松的直接访问到某一上级
+    // 8.对象文件分离
+
+// 组件基类
+class Component{
+    constructor(sort){
+        this.sort = sort;
+        this.position = this.checkPosition(sort);
+        this.parent = null;
+        this.children = [];
+    }
+    // 创建自身元素
+    createElementSelf(elementType,className){
+        this.element = document.createElement(elementType);
+        this.element.classList.add(className);
+    }
+    // 根据序号，返回对应的位置对象
+    checkPosition(sort){
+        // 纵横对象
+        let position = {
+            column:"",
+            row:""
+        }
+        // 判断纵列位置
+        if(sort <= 3){
+            position.column = "top";
+        }else if(sort >= 4 && sort <= 6){
+            position.column = "middle";
+        }else{
+            position.column = "bottom"
+        }
+        // 判断横向位置
+        if(sort == 1 || sort == 4 || sort == 7){
+            position.row = "left";
+        }else if(sort == 2 || sort == 5 || sort == 8){
+            position.row = "center";
+        }else{
+            position.row = "right"
+        }
+        // 返回纵横对象
+        return position;
+    }
+}
+
+class Board extends Component{
+    constructor(setting){
+        super();
         this.boardData = [];
         this.timeInterval = undefined;
         this.isStartGame = false;
         this.element = Omain;
-        this.children = [];
         this.createChildren();
+        this.canChangeStone = setting.canChangeStone;
     }
     // 创建下级对象及元素
     createChildren(){
@@ -29,56 +83,47 @@ class Board{
             this.children[i].allBlockNormal();
         }
     }
-    // 广播鼠标移入了方块
-    checkHoverLight(obj){
-        let hoverBlock = obj;
-        let hoverArea = obj.parent;
+    // 鼠标移入了Block
+    checkHoverLight(eventObj){
+        let event = {
+            area : eventObj.parent,
+            block : eventObj
+        }
         for(let i = 1;i<10;i++){
-            this.children[i].isLightArea(hoverArea,hoverBlock);
+            this.children[i].isLightArea(event);
         }
     }
-    // 广播鼠标点击了数字按钮
-    checkClickNumberButton(obj){
-        let clickNumberButton = obj;
-        let clickBlock = obj.parent;
-        let clickArea = obj.parent.parent;
+    // 鼠标点击了numberButton
+    checkClickNumberButton(eventObj){
+        let event = {
+            area : eventObj.parent.parent,
+            block : eventObj.parent,
+            numberButton : eventObj
+        }
         for(let i = 1;i<10;i++){
-            // 此区域是事件区域
-            let isArea = this.children[i].ifRuleArea(clickArea);
-            if(this.children[i] == clickArea){
-                for(let i = 1;i<10;i++){
-                    this.children[i].hideChildren(clickBlock,clickNumberButton);
-                }
-
-            // 此区域是事件连带区域
-            }else if(isArea.column && isArea.row){
-                for(let i = 1;i<10;i++){
-                    this.children[i].isClickBlock(clickBlock,clickNumberButton);
-                }
-            }
+            this.children[i].isClickArea(event);
         }
     }
-    // 广播鼠标右键了卡片
-    CardRightClick(obj){
-        let clickCard = obj;
-        let clickBlock = obj.parent;
-        let clickArea = obj.parent.parent;
+    // 鼠标右键了numberCard
+    CardRightClick(eventObj){
+        let event = {
+            area : eventObj.parent.parent,
+            block : eventObj.parent,
+            numberCard : eventObj
+        }
         for(let i = 1;i<10;i++){
-            this.children[i].isCardArea(clickArea,clickBlock,clickCard);
+            this.children[i].isCardClickArea(event);
         }
     }
 }
 
 // 区 （大区域）
-class BoardArea{
+class BoardArea extends Component{
     constructor(sort){
-        this.element = document.createElement('div');
-        this.element.classList.add("middleArea");
-        this.sort = sort;
-        this.children = [];
-        this.parent = null;
+        super(sort);
+        this.createElementSelf('div','middleArea');
+        // 创建下级
         this.createChildren();
-        this.position = checkPosition(sort);
     }
     // 创建下级对象及元素
     createChildren(){
@@ -102,23 +147,22 @@ class BoardArea{
         }
     }
     // 侦听鼠标移入的高亮广播
-    isLightArea(hoverArea,hoverBlock){
+    isLightArea(event){
         // 如果是自己，就不高亮了
-        if(hoverArea == this){
+        if(event.area == this){
             return;
         }
-        this.isHoverColumn = false;
-        this.isHoverRow = false;
-        if(hoverArea.position.column == this.position.column){
-            this.isHoverColumn = true;
+        // this.isHoverColumn = false;
+        // this.isHoverRow = false;
+        let isArea = this.ifRuleArea(event.area);
+        if(isArea.column){
             for(let i = 1;i<10;i++){
-                this.children[i].isLightBlock(hoverBlock);
+                this.children[i].HoverArea_ColumnCheck(event);
             }
         }
-        if(hoverArea.position.row == this.position.row){
-            this.isHoverRow = true;
+        if(isArea.row){
             for(let i = 1;i<10;i++){
-                this.children[i].isLightBlock(hoverBlock);
+                this.children[i].HoverArea_RowCheck(event);
             }
         }
         
@@ -131,51 +175,67 @@ class BoardArea{
         }
         return isArea;
     }
-    // 侦听鼠标点击广播
-    isClickArea(clickArea,clickBlock,clickNumberButton){
+    // 鼠标点击按钮的二级事件广播
+    isClickArea(event){
+        let isArea = this.ifRuleArea(event.area);
         // 如果在同区域内的事件
-        if(this == clickArea){
+        if(this == event.area){
             for(let i = 1;i<10;i++){
-                this.children[i].hideChildren(clickBlock,clickNumberButton);
+                this.children[i].hideChildren(event);
             }
             return;
         }
-        // 初始化纵横判断结果
-        this.isClickColumn = false;
-        this.isClickRow = false;
         // 如果在横列
-        if(this.ifRuleRow(clickArea)){
-            this.isClickRow = true;
+        if(isArea.row){
             for(let i = 1;i<10;i++){
-                this.children[i].isClickBlock(clickBlock,clickNumberButton);
+                this.children[i].ClicButton_RowCheck(event);
             }
         }
         // 如果在纵列
-        if(this.ifRuleColumn(clickArea)){
-            this.isClickColumn = true;
+        if(isArea.column){
             for(let i = 1;i<10;i++){
-                this.children[i].isClickBlock(clickBlock,clickNumberButton);
+                this.children[i].ClicButton_ColumnCheck(event);
             }
         }
-        // this.isRuleArea();
     }
-    isRightClick(){
-
+    isCardClickArea(event){
+        let isArea = this.ifRuleArea(event.area);
+        //如果在同区域内的事件
+        if(this == event.area){
+            for(let i = 1;i<10;i++){
+                this.children[i].showChildren(event);
+            }
+            return;
+        }
+        // 如果在横列
+        if(isArea.row){
+            for(let i = 1;i<10;i++){
+                this.children[i].ClickCard_RowCheck(event);
+            }
+        }
+        // 如果在纵列
+        if(isArea.column){
+            for(let i = 1;i<10;i++){
+                this.children[i].ClickCard_ColumnCheck(event);
+            }
+        }
     }
 }
-
 // 块（小块）
-class BoardBlock{
+class BoardBlock extends Component{
     constructor(sort){
-        this.element = document.createElement('div');
-        this.element.classList.add("smallArea");
-        this.sort = sort;
-        this.children = [];
+        super(sort);
+        this.createElementSelf('div','smallArea');
         this.card = null;
-        this.parent = null;
-        this.position = checkPosition(sort);
         this.createChildren();
         this.EventInit();
+    }
+    setStone(number){
+        this.element.classList.add('stone');
+        this.element.classList.add('active');
+        this.isStone = true;
+        this.value= number;
+        this.card.setSort(number);
     }
     // 创建下级对象及元素
     createChildren(){
@@ -207,11 +267,15 @@ class BoardBlock{
         this.element.classList.remove("light");
     }
     // 侦听二级鼠标移入的高亮广播
-    isLightBlock(hoverBlock){
-        if(hoverBlock.position.column == this.position.column && this.parent.isHoverColumn){
+    HoverArea_ColumnCheck(event){
+        let isBlock = this.ifRuleBlock(event.block);
+        if(isBlock.column){
             this.light();
         }
-        if(hoverBlock.position.row == this.position.row  && this.parent.isHoverRow){
+    }
+    HoverArea_RowCheck(event){
+        let isBlock = this.ifRuleBlock(event.block);
+        if(isBlock.row){
             this.light();
         }
     }
@@ -223,41 +287,63 @@ class BoardBlock{
         }
         return isBlock;
     }
-    // 侦听二级鼠标点击广播
-    isClickBlock(clickBlock,clickNumberButton){
-        if(clickBlock.position.column == this.position.column && this.parent.isHoverColumn){
-            for(let i = 1;i<10;i++){
-                this.children[i].isHide(clickNumberButton);
-            }
+    ClicButton_ColumnCheck(event){
+        let isBlock = this.ifRuleBlock(event.block);
+        if(isBlock.column){
+            // 隐藏选定数字按钮
+            this.children[event.numberButton.sort].hide();
         }
-        if(clickBlock.position.row == this.position.row  && this.parent.isHoverRow){
-            for(let i = 1;i<10;i++){
-                this.children[i].isHide(clickNumberButton);
-            }
+    }
+    ClicButton_RowCheck(event){
+        let isBlock = this.ifRuleBlock(event.block);
+        if(isBlock.row){
+            // 隐藏选定数字按钮
+            this.children[event.numberButton.sort].hide();
+        }
+    }
+    ClickCard_ColumnCheck(event){
+        let isBlock = this.ifRuleBlock(event.block);
+        if(isBlock.column){
+            // 隐藏选定数字按钮
+            this.children[event.numberCard.sort].show();
+        }
+    }
+    ClickCard_RowCheck(event){
+        let isBlock = this.ifRuleBlock(event.block);
+        if(isBlock.row){
+            // 隐藏选定数字按钮
+            this.children[event.numberCard.sort].show();
         }
     }
     // 隐藏所有子级别的方块
-    hideChildren(clickBlock,clickNumberButton){
-        if(this == clickBlock){
-            this.card.show(clickNumberButton.sort);
+    hideChildren(event){
+        if(this == event.block){
+            this.card.setSort(event.numberButton.sort);
             this.element.classList.add("active");
         }
         for(let i = 1;i<10;i++){
-            this.children[clickNumberButton.sort].hide();
+            this.children[event.numberButton.sort].hide();
+        }
+    }
+    showChildren(event){
+        if(this == event.block){
+            // this.card.hi(event.numberCard.sort);
+            this.element.classList.remove("active");
+        }
+        for(let i = 1;i<10;i++){
+            this.children[event.numberCard.sort].show();
         }
     }
 }
 // 按钮
-class NumberButton{
+class NumberButton extends Component{
     constructor(sort){
         // 创建数字按钮
-        this.element = document.createElement('button')
-        this.element.classList.add("numberButton");
+        super(sort);
+        this.createElementSelf('button',`numberButton`);
+        this.element.classList.add(`n${sort}`);
         this.element.setAttribute("sort",sort);
-        this.element.classList.add("n"+(sort));
         this.element.innerText = sort;
-        this.sort = sort;
-        this.position = checkPosition(sort);
         this.EventInit();
     }
     EventInit(){
@@ -276,61 +362,38 @@ class NumberButton{
         this.element.classList.add('hide');
     }
     // 判断数字是否相同，相同则隐藏
-    isHide(clickNumberButton){
-        if(this.sort == clickNumberButton.sort){
+    isHide(event){
+        if(this.sort == event.numberButton.sort){
             this.hide();
         }
     }
 }
 // 数字卡片
-class NumberCard{
+class NumberCard extends Component{
     constructor(sort){
         // 创建卡片
-        this.element = document.createElement('button');
-        this.element.classList.add("numberCard");
+        super(sort);
+        this.createElementSelf('button','numberCard');
         this.EventInit();
     }
     // 事件上报
     EventInit(){
         // 数字按钮被点击
-        this.element.oncontextmenu = ()=>{
+        this.element.onclick = ()=>{
+            if(this.parent.isStone && !this.parent.parent.parent.canChangeStone){
+                return false;
+            }
             this.parent.parent.parent.CardRightClick(this);
+            return false;
         }
     }
     // 设置数字
-    setNumber(sort){
+    setSort(sort){
+        this.sort = sort;
         this.element.innerText = sort;
     }
     // 显示方块本身
     show(sort){
-        this.setNumber(sort);
+        // this.setNumber(sort);
     }
-    // hide(){
-
-    // }
-}
-
-// 根据序号，返回对应的位置对象
-function checkPosition(sort){
-    let position = {
-        column:"",
-        row:""
-    }
-    if(sort <= 3){
-        position.column = "top";
-    }else if(sort >= 4 && sort <= 6){
-        position.column = "middle";
-    }else{
-        position.column = "bottom"
-    }
-
-    if(sort == 1 || sort == 4 || sort == 7){
-        position.row = "left";
-    }else if(sort == 2 || sort == 5 || sort == 8){
-        position.row = "center";
-    }else{
-        position.row = "right"
-    }
-
-    return position;
 }
