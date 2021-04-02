@@ -1,0 +1,52 @@
+    // @font-face{
+//     font-family: "shouShu";
+//     src:url("./../assets/云游手书.ttf");
+// }
+.setting{
+    border:3px solid #f3f3f3;
+    background:#fff;
+    border-radius: 6px;
+    .showLight,
+    .showNumberButton{
+        display:flex;
+        // border:2px solid #eeeeee;
+        padding:6px;
+        @height:20px;
+        .name{
+            font-family: 'shouShu';
+            font-size:13px;
+            color:#999;
+            line-height: @height - 2px;
+            margin-right:4px;
+            user-select: none;
+        }
+        .selectComponent{
+            width:40px;
+            height:@height;
+            background:#eee;
+            border-radius: calc(@height / 2);
+            cursor: pointer;
+            transition:all 0.2s;
+            &:hover{
+
+            }
+            &.active{
+                background:#666;
+                .valueButton{
+                    float:right;
+                    margin-right:2px;
+                }
+            }
+            .valueButton{
+                width:@height - 4px;
+                height:@height - 4px;
+                margin-top:2px;
+                margin-left:2px;
+                float:left;
+                border-radius: calc(@height / 2);
+                background:#fff;
+                transition:all 0.2s;
+            }
+        }
+    }
+}

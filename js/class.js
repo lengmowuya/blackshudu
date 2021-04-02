@@ -16,6 +16,7 @@ let Omain = document.querySelector(".Board");
     // 6.优化类的函数注册
     // 7.每级的对象，都可以轻松的直接访问到某一上级
     // 8.对象文件分离
+    // 9.将事件行为抽离成单独方法
 
 // 组件基类
 class Component{
@@ -57,7 +58,6 @@ class Component{
         return position;
     }
 }
-
 class Board extends Component{
     constructor(setting){
         super();
@@ -67,6 +67,9 @@ class Board extends Component{
         this.element = Omain;
         this.createChildren();
         this.canChangeStone = setting.canChangeStone;
+    }
+    setRandomStone(AreaSort,BlockSort,number){
+        this.children[AreaSort].children[BlockSort].setStone(number);
     }
     // 创建下级对象及元素
     createChildren(){
@@ -319,6 +322,7 @@ class BoardBlock extends Component{
     hideChildren(event){
         if(this == event.block){
             this.card.setSort(event.numberButton.sort);
+            this.showCard = true;
             this.element.classList.add("active");
         }
         for(let i = 1;i<10;i++){
@@ -328,11 +332,29 @@ class BoardBlock extends Component{
     showChildren(event){
         if(this == event.block){
             // this.card.hi(event.numberCard.sort);
+            this.showCard = false;
             this.element.classList.remove("active");
         }
         for(let i = 1;i<10;i++){
             this.children[event.numberCard.sort].show();
         }
+    }
+    checkWarning(){
+        if(this.showCard){
+            return;
+        }
+        let allHide = true;
+        for(let i = 1;i<10;i++){
+            if(this.children[i].showSelf){
+                allHide = false;
+            }
+        }
+        if(allHide){
+            this.element.classList.add("warning");
+        }else{
+            this.element.classList.remove("warning");
+        }
+        // return allHide;
     }
 }
 // 按钮
@@ -344,22 +366,32 @@ class NumberButton extends Component{
         this.element.classList.add(`n${sort}`);
         this.element.setAttribute("sort",sort);
         this.element.innerText = sort;
+        this.showSelf = true;
         this.EventInit();
     }
     EventInit(){
         // 数字按钮被点击
         this.element.onclick = ()=>{
             this.parent.parent.parent.checkClickNumberButton(this);
+            let audio = new Audio("./../assets/audio/选中.mp3");
+            audio.addEventListener("canplaythrough", event => {
+                /* 音频可以播放；如果权限允许则播放 */
+                audio.play();
+            });
         }
     }
 
     // 显示自身
     show(){
+        this.showSelf = true;
         this.element.classList.remove('hide');
+        this.parent.checkWarning();
     }
     // 隐藏自身
     hide(){
+        this.showSelf = false;
         this.element.classList.add('hide');
+        this.parent.checkWarning();
     }
     // 判断数字是否相同，相同则隐藏
     isHide(event){
@@ -384,6 +416,11 @@ class NumberCard extends Component{
                 return false;
             }
             this.parent.parent.parent.CardRightClick(this);
+            let audio = new Audio("./../assets/audio/取选.mp3");
+            audio.addEventListener("canplaythrough", event => {
+                /* 音频可以播放；如果权限允许则播放 */
+                audio.play();
+            });
             return false;
         }
     }

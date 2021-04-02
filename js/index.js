@@ -57,3 +57,4 @@ BoardHistory.init();
 let MainBoard = new Board({
     canChangeStone:false
 });
+// MainBoard.setRandomStone(5,6,4)

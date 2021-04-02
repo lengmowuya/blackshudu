@@ -1,13 +1,13 @@
 .Board {
-  width: 680px;
-  height: 680px;
+  width: 700px;
+  height: 700px;
   display: flex;
   flex-flow: row wrap;
   background: #fff;
-  padding: 10px;
+  padding: 20px;
   border-radius: 12px;
-  border: 2px solid #eee;
-  box-shadow: 5px 5px 0px #eee;
+  border: 3px solid #f3f3f3;
+  border-radius: 6px;
 }
 .Board.squazeMode .numberButton {
   visibility: hidden;
@@ -22,31 +22,48 @@
   display: flex;
   flex-flow: row wrap;
   flex-shrink: 0;
+  background: #999;
 }
 .Board .middleArea .smallArea {
-  border: 2px solid #f6f6f6;
+  border: 2px solid #ddd;
   width: 30%;
   background: #fff;
   flex-grow: 1;
   flex-shrink: 0;
   display: flex;
   flex-flow: row wrap;
-  padding: 0px;
+  padding: 2px;
   box-sizing: border-box;
   position: relative;
-  border-radius: 3px;
-  margin: 3px;
   transition: all 0.2s;
+}
+.Board .middleArea .smallArea:nth-child(2),
+.Board .middleArea .smallArea:nth-child(3),
+.Board .middleArea .smallArea:nth-child(5),
+.Board .middleArea .smallArea:nth-child(6),
+.Board .middleArea .smallArea:nth-child(8),
+.Board .middleArea .smallArea:nth-child(9) {
+  margin-left: -2px;
+}
+.Board .middleArea .smallArea:nth-child(4),
+.Board .middleArea .smallArea:nth-child(5),
+.Board .middleArea .smallArea:nth-child(6),
+.Board .middleArea .smallArea:nth-child(7),
+.Board .middleArea .smallArea:nth-child(8),
+.Board .middleArea .smallArea:nth-child(9) {
+  margin-top: -2px;
 }
 .Board .middleArea .smallArea.stone {
   background: #ccc;
   color: #333;
 }
 .Board .middleArea .smallArea.light {
-  border-color: #ddd;
+  border-color: #888;
+  z-index: 9999;
 }
-.Board .middleArea .smallArea.active {
-  border: none;
+.Board .middleArea .smallArea.warning {
+  animation: warning 1.5s infinite alternate ease-out;
+  z-index: 9999999;
 }
 .Board .middleArea .smallArea.active .numberCard {
   visibility: visible;
@@ -61,44 +78,37 @@
   font-size: 12px;
   transition: all 0.2s;
   outline: none;
-  border-radius: 3px;
   user-select: none;
-  background: #f3f3f3;
+  background: #fff;
+  color: #333;
 }
 .Board .middleArea .smallArea .numberButton:hover {
-  background: #333;
-  color: #eee;
+  background: #eee;
+  color: #232323;
 }
 .Board .middleArea .smallArea .numberButton.hide {
   animation: hiddenButton 0.3s forwards;
 }
 .Board .middleArea .smallArea .numberCard {
-  width: calc(100%);
-  height: calc(100% - 6px);
+  width: calc(100% - 4px);
+  height: calc(100% - 4px);
   flex-grow: 1;
   border: none;
   border-radius: 0;
   font-size: 42px;
   outline: none;
   position: absolute;
-  left: 0px;
-  top: 0px;
+  left: 2px;
+  top: 2px;
   user-select: none;
-  border-radius: 5px;
-  vertical-align: top;
-  text-shadow: 4px 4px 0px rgba(0, 0, 0, 0.1);
+  background: #fff;
   transition: all 0.3s;
   visibility: hidden;
-  background: #eee;
-  border: 1px solid #ccc;
   box-sizing: border-box;
-  box-shadow: 0px 6px 0px #ccc;
   font-family: "shouShu";
 }
 .Board .middleArea .smallArea .numberCard:hover {
-  background: #ccc;
-  box-shadow: 0px 6px 0px #aaa;
-  text-shadow: 4px 4px 0px rgba(255, 255, 255, 0.1);
+  background: #eee;
 }
 @keyframes hiddenButton {
   0% {
@@ -120,9 +130,17 @@
     opacity: 1 !important;
   }
 }
+@keyframes warning {
+  from {
+    border-color: #ff7474;
+  }
+  to {
+    border-color: #ffcfcf;
+  }
+}
 .Info {
-  width: 200px;
-  height: 730px;
+  width: 300px;
+  height: 750px;
   margin-left: 15px;
   display: flex;
   border-radius: 6px;
@@ -131,12 +149,10 @@
 .Info .history {
   width: 100%;
   height: 200px;
-  border: 2px solid #eee;
+  border: 3px solid #f3f3f3;
   background: #fff;
   border-radius: 6px;
   display: flex;
-  border: 8px solid #eee;
-  box-shadow: 3px 3px 0px #ccc, 6px 6px 9px #999;
 }
 .Info .history .historyList {
   flex-grow: 1;
@@ -178,7 +194,13 @@
 .Info .history .historyList .historyLi .number {
   color: #333;
 }
-.Info .time {
+.Info .other {
+  border: 3px solid #f3f3f3;
+  background: #fff;
+  border-radius: 6px;
+  margin: 10px 0px;
+}
+.Info .other .time {
   font-size: 12px;
   line-height: 30px;
   color: #666;

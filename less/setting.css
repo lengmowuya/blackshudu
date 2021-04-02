@@ -1,0 +1,48 @@
+.setting {
+  border: 3px solid #f3f3f3;
+  background: #fff;
+  border-radius: 6px;
+}
+.setting .showLight,
+.setting .showNumberButton {
+  display: flex;
+  padding: 6px;
+}
+.setting .showLight .name,
+.setting .showNumberButton .name {
+  font-family: 'shouShu';
+  font-size: 13px;
+  color: #999;
+  line-height: 18px;
+  margin-right: 4px;
+  user-select: none;
+}
+.setting .showLight .selectComponent,
+.setting .showNumberButton .selectComponent {
+  width: 40px;
+  height: 20px;
+  background: #eee;
+  border-radius: calc(20px / 2);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.setting .showLight .selectComponent.active,
+.setting .showNumberButton .selectComponent.active {
+  background: #666;
+}
+.setting .showLight .selectComponent.active .valueButton,
+.setting .showNumberButton .selectComponent.active .valueButton {
+  float: right;
+  margin-right: 2px;
+}
+.setting .showLight .selectComponent .valueButton,
+.setting .showNumberButton .selectComponent .valueButton {
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+  margin-left: 2px;
+  float: left;
+  border-radius: calc(20px / 2);
+  background: #fff;
+  transition: all 0.2s;
+}

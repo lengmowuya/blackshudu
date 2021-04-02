@@ -1,16 +1,17 @@
 .Board{
-    width:680px;
-    height:680px; 
+    width:700px;
+    height:700px; 
     // border:6px solid #333;
     display:flex;
     flex-flow: row wrap;
     background:#fff;
-    padding:10px;
+    padding:20px;
     // border:15px solid #eee;
     // border-image: url(./../assets/OIP.jfif) 20 20 round;
     border-radius: 12px;
-    border:2px solid #eee;
-    box-shadow: 5px 5px 0px #eee;
+    border:3px solid #f3f3f3;
+    border-radius:6px;
+    // box-shadow: 5px 5px 0px #eee;
     &.squazeMode{
         .numberButton{
             visibility:hidden;
@@ -31,6 +32,8 @@
         display:flex;
         flex-flow: row wrap;
         flex-shrink: 0;
+        background:#999;
+        // padding:1px;
         // box-shadow: 0px 0px 3px rgb(0, 0, 0,0.1);
         // &:nth-child(2n-1){
         //     background:#eee;
@@ -40,8 +43,8 @@
         //     }
         // }
         .smallArea{
-            @padding:0px;
-            border:2px solid #f6f6f6;
+            @padding:2px;
+            border:2px solid #ddd;
             width:30%;
             background:#fff;
             flex-grow: 1;
@@ -51,27 +54,50 @@
             padding:@padding;
             box-sizing: border-box;
             position: relative;
-            border-radius: 3px;
-            margin:3px;
+            // border-radius: 3px;
+            // margin:1px;
             transition: all 0.2s;
+            &:nth-child(2),
+            &:nth-child(3),
+            &:nth-child(5),
+            &:nth-child(6),
+            &:nth-child(8),
+            &:nth-child(9){
+                margin-left:-2px;
+            }
+            &:nth-child(4),
+            &:nth-child(5),
+            &:nth-child(6),
+            &:nth-child(7),
+            &:nth-child(8),
+            &:nth-child(9){
+                margin-top:-2px;
+            }
             &.stone{
                 background:#ccc;
                 color:#333;
             }
+
             &.light{
                 // border-color: #999;
                 // border-color:tomato !important;
                 // border:1px solid blue;
                 // background:#ccc;
-                border-color: #ddd;
+                border-color: #888;
+                z-index: 9999;
                 // box-shadow:4px 6px 3px #eee;
 
                 .numberButton{
                     // background:#ddd;
                 }
             }
+            &.warning{
+                animation:warning 1.5s infinite alternate ease-out;
+                z-index:9999999;
+            }
             &.active{
-                border:none;
+                // border:none;
+                // z-index: 9999;
                 .numberButton{
                     // display:none;
                 }
@@ -92,14 +118,16 @@
                 font-size:12px;
                 transition:all 0.2s;
                 outline:none;
-                border-radius: 3px;
+                // border-radius: 3px;
                 user-select: none;
+                background:#fff;
                 // font-weight: bold;
-                background:#f3f3f3;
+                // background:#f3f3f3;
                 // font-family: "shouShu";
+                color:#333;
                 &:hover{
-                    background:#333;
-                    color:#eee;
+                    background:#eee;
+                    color:#232323;
                 }
                 &.hide{
                     animation:hiddenButton 0.3s forwards;
@@ -107,8 +135,8 @@
                 }
             }
             .numberCard{
-                width:calc(100%);
-                height:calc(100% - 6px);
+                width:calc(100% - 4px);
+                height:calc(100% - 4px);
                 flex-grow: 1;
                 border:none;
                 border-radius:0;
@@ -116,29 +144,30 @@
                 // font-weight: bold;
                 outline:none;
                 position:absolute;
-                left:0px;
-                top:0px;
+                left:2px;
+                top:2px;
                 user-select: none;
-                border-radius: 5px;
-                vertical-align: top;
-                text-shadow: 4px 4px 0px rgba(0, 0, 0, 0.1); 
+                background:#fff;
+                // border-radius: 5px;
+                // vertical-align: top;
+                // text-shadow: 4px 4px 0px rgba(0, 0, 0, 0.1); 
                 transition: all 0.3s;
                 // display:none;
                 visibility:hidden;
                 // opacity:0;
-                background:#eee;
-                border:1px solid #ccc;
+                // background:#eee;
+                // border:1px solid #ccc;
                 box-sizing: border-box;
                 // -webkit-text-fill-color:transparent;
                 // color:#eee;
                 // text-shadow: 1px 0px 1px #000,-1px 0px 1px #fff;
-                box-shadow: 0px 6px 0px #ccc;
+                // box-shadow: 0px 6px 0px #ccc;
                 font-family: "shouShu";
                 &:hover{
-                    background:#ccc;
-                    box-shadow: 0px 6px 0px #aaa;
+                    background:#eee;
+                    // box-shadow: 0px 6px 0px #aaa;
                     // color:#fff;
-                    text-shadow: 4px 4px 0px rgba(255, 255, 255, 0.1);
+                    // text-shadow: 4px 4px 0px rgba(255, 255, 255, 0.1);
                 }
                 // &.active{
                 //     display:block;
@@ -167,10 +196,18 @@
         opacity:1 !important;
     }
 }
+@keyframes warning{
+    from{
+        border-color:rgb(255, 116, 116);
+    }
+    to{
+        border-color:rgb(255, 207, 207);
+    }
+    
+}
 .Info{
-    width:200px;
-    height:730px;
-
+    width:300px;
+    height:750px;
     margin-left:15px;
     display:flex;
     border-radius: 6px;
@@ -179,12 +216,12 @@
         width:100%;
         height: 200px;
         // background:#f6f6f6;
-        border:2px solid #eee;
+        border:3px solid #f3f3f3;
         background:#fff;
         border-radius: 6px;
         display:flex;
-        border:8px solid #eee;
-        box-shadow: 3px 3px 0px #ccc,6px 6px 9px #999;
+        // border:8px solid #eee;
+        // box-shadow: 3px 3px 0px #ccc,6px 6px 9px #999;
         .historyList{
             flex-grow: 1;
             list-style: none;
@@ -229,10 +266,17 @@
             }
         }
     }
-    .time{
-        font-size:12px;
-        line-height: 30px;
-        color:#666;
-        margin:10px;
+    .other{
+        border:3px solid #f3f3f3;
+        background:#fff;
+        border-radius: 6px;
+        margin:10px 0px;
+        .time{
+            font-size:12px;
+            line-height: 30px;
+            color:#666;
+            margin:10px;
+            // font-family: 'shouShu';
+        }
     }
 }
